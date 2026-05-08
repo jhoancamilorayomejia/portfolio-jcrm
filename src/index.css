@@ -28,6 +28,10 @@
   @media (max-width: 1024px) {
     font-size: 16px;
   }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,6 +56,7 @@
 
 body {
   margin: 0;
+  overflow-x: hidden; /* 👈 evita scroll horizontal en móvil */
 }
 
 #root {
@@ -64,6 +69,13 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+
+  /* 👇 en móvil quitamos el borde lateral y el ancho fijo */
+  @media (max-width: 768px) {
+    width: 100%;
+    border-inline: none;
+    padding-inline: 0;
+  }
 }
 
 h1,
@@ -77,20 +89,34 @@ h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
+
   @media (max-width: 1024px) {
     font-size: 36px;
     margin: 20px 0;
   }
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+    letter-spacing: -0.8px;
+    margin: 16px 0;
+  }
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
+
   @media (max-width: 1024px) {
     font-size: 20px;
   }
+
+  @media (max-width: 480px) {
+    font-size: 17px;
+  }
 }
+
 p {
   margin: 0;
 }
@@ -108,4 +134,8 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
 }

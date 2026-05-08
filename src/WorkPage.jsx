@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import goVueVideo from './assets/GoVue.mp4';
 import './WorkPage.css';
@@ -8,6 +8,8 @@ const GithubIcon = () => (
     <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
   </svg>
 );
+
+
 
 const STACKS = [
   { id: 'go',     label: 'Golang · Vue.js · PostgreSQL',       accent: '#00ACD7' },
@@ -20,8 +22,8 @@ const PROJECTS = {
     featured: {
       repo:  'https://github.com/jhoancamilorayomejia/GymBox',
       name:  'GymBox',
-      about: 'A full-stack gym management system built with Go and Vue.js. Handles member registrations, subscription plans, attendance tracking, and payment control — all through a clean, reactive interface backed by a performant Go REST API and PostgreSQL.',
-      tags:  ['Go', 'Vue.js 3', 'PostgreSQL', 'Payment gateway','REST API', 'JWT'],
+      about: 'A full-stack gym management system designed to help gyms efficiently manage client information, handle subscriptions, attendance tracking, and maintain clear payment control. It also includes a clear and intuitive subscription visualization system, allowing both gym administrators and clients to easily identify the status of each membership plan (active, expired, etc.), improving the overall user experience and decision-making process — all through a clean and reactive interface backed by a high-performance REST API, PostgreSQL, and JWT-based authentication for security.',
+      tags:  ['Go', 'Vue.js 3', 'PostgreSQL', 'Payment gateway', 'Docker'],
       video: goVueVideo,
     },
     others: [
@@ -29,15 +31,15 @@ const PROJECTS = {
         repo:  'https://github.com/jhoancamilorayomejia/barbershop',
         name:  'Barbershop',
         icon:  '✂️',
-        about: 'An appointment booking system for barbershops. Clients can browse available time slots, book sessions with their preferred barber, and receive confirmations — while the admin panel manages schedules, services, and staff availability.',
-        tags:  ['Go', 'Vue.js', 'PostgreSQL', 'Docker','REST API', 'JWT'],
+        about: 'A web-based appointment booking system developed for barbershops to simplify reservation management and avoid scheduling conflicts. Clients can easily book appointments based on real-time availability, while the administrator can clearly manage reservations, including customer names, dates, and time slots. Once an appointment is confirmed, a PDF receipt is automatically generated and downloaded as proof of the reservation.',
+        tags:  ['Go', 'Vue.js', 'PostgreSQL', 'Docker'],
       },
       {
         repo:  'https://github.com/jhoancamilorayomejia/TGacueducto',
         name:  'TG Acueducto',
         icon:  '💧',
-        about: 'A management system for small water supply companies (acueductos). Tracks users, consumption readings, billing cycles, and payment records — designed to digitize the administrative workflows of community-run water services.',
-        tags:  ['Go', 'Vue.js', 'PostgreSQL', 'Payment gateway','REST API', 'JWT'],
+        about: 'A digital billing management platform developed for small community water utility companies, designed to optimize administrative processes and improve interaction with users. The system allows utility companies to generate invoices, download billing records, and automatically send invoices via email. Customers can view and download their invoices, as well as make online payments through payment gateway integration. The project was focused on applying software architecture best practices and strengthening Full-Stack development skills, especially in backend and frontend communication through REST API integrations.',
+        tags:  ['Go', 'Vue.js', 'PostgreSQL', 'Payment gateway'],
       },
     ],
   },
@@ -46,10 +48,10 @@ const PROJECTS = {
     others: [
       {
         repo:  'https://github.com/jhoancamilorayomejia/payment-orders',
-        name:  'Spring Boot Projects',
+        name:  'Spring Boot(Java)',
         icon:  '☕',
-        about: 'Projects built with Spring Boot (Java) and Angular, connected to PostgreSQL. Full-stack enterprise-grade applications with REST APIs, dependency injection, and reactive frontends.',
-        tags:  ['Java', 'Spring Boot', 'Angular', 'PostgreSQL', 'REST API', 'JWT'],
+        about: 'A secure order management system that combines JWT-based authentication with role-based access control for administrators and operators. The platform allows users to register and update orders, receive status change notifications, and access protected routes according to their assigned roles, preventing unauthorized access. The project focused on implementing secure authentication flows, token validation and expiration control, as well as efficient backend and frontend communication through REST API integrations.',
+        tags:  ['Java', 'Spring Boot', 'Angular', 'PostgreSQL'],
       },
     ],
   },
@@ -60,8 +62,8 @@ const PROJECTS = {
         repo:  'https://github.com/jhoancamilorayomejia/AppGym',
         name:  'Laravel Projects',
         icon:  '🐘',
-        about: 'Web applications developed with Laravel (PHP) and PostgreSQL. Leveraging Eloquent ORM, Blade templates, and Artisan CLI to build robust, maintainable server-side solutions.',
-        tags:  ['PHP', 'Laravel', 'PostgreSQL','REST API', 'JWT'],
+        about: 'A platform designed to help gyms efficiently manage customer information, subscriptions, and payment records. The system also includes email notifications for payment reminders and confirmations, as well as online payment gateway integration to facilitate secure digital transactions. Additionally, it provides a clear and intuitive subscription visualization that allows both administrators and clients to easily identify the status of each membership plan, improving overall user experience and management efficiency. Security and authentication are handled using JWT-based authorization.',
+        tags:  ['PHP', 'Laravel', 'PostgreSQL'],
       },
     ],
   },
@@ -71,10 +73,49 @@ export default function WorkPage() {
   const navigate = useNavigate();
   const [activeStack, setActiveStack] = useState('go');
 
+   // ─── GOOGLE TRANSLATE ───
+  useEffect(() => {
+  const addGoogleTranslateScript = () => {
+    if (document.getElementById('google-translate-script')) return;
+
+    const script = document.createElement('script');
+    script.id = 'google-translate-script';
+    script.src =
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    window.googleTranslateElementInit = () => {
+      if (window.google && window.google.translate) {
+        new window.google.translate.TranslateElement(
+          {
+            pageLanguage: 'en',
+            includedLanguages: 'es,en,pt,fr,de,it',
+            layout:
+              window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          },
+          'google_translate_element'
+        );
+      }
+    };
+  };
+
+  addGoogleTranslateScript();
+}, []);
+
   const data   = PROJECTS[activeStack];
   const accent = STACKS.find(s => s.id === activeStack)?.accent ?? '#2563eb';
 
-  return (
+  
+
+   return (
+    <>
+      {/* ─── GOOGLE TRANSLATE ─── */}
+      <div className="translate-container">
+        <div id="google_translate_element"></div>
+      </div>
+    
     <div className="wp-root">
       <header className="wp-header">
         <button className="wp-back" onClick={() => navigate('/')}>
@@ -192,5 +233,6 @@ export default function WorkPage() {
         </div>
       </main>
     </div>
+    </>
   );
 }

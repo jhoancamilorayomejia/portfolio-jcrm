@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import profilePhoto from './assets/profile.jpg';
@@ -8,8 +8,44 @@ function App() {
   const [showCV, setShowCV] = useState(false);
   const navigate = useNavigate();
 
+   // ─── GOOGLE TRANSLATE ───
+  useEffect(() => {
+  const addGoogleTranslateScript = () => {
+    if (document.getElementById('google-translate-script')) return;
+
+    const script = document.createElement('script');
+    script.id = 'google-translate-script';
+    script.src =
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    window.googleTranslateElementInit = () => {
+      if (window.google && window.google.translate) {
+        new window.google.translate.TranslateElement(
+          {
+            pageLanguage: 'en',
+            includedLanguages: 'es,en,pt,fr,de,it',
+            layout:
+              window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          },
+          'google_translate_element'
+        );
+      }
+    };
+  };
+
+  addGoogleTranslateScript();
+}, []);
+
   return (
     <>
+    {/* ─── GOOGLE TRANSLATE ─── */}
+      <div className="translate-container">
+        <div id="google_translate_element"></div>
+      </div>
+
       {/* ─── CV MODAL ─── */}
       {showCV && (
         <div className="cv-overlay" onClick={() => setShowCV(false)}>
@@ -107,7 +143,7 @@ function App() {
               <span className="exp-dot" />
               <div>
                 <strong>Colsubastas.com</strong>
-                <p>• Worked as a Part-Time Software Developer in the creation, maintenance, and customization of Drupal modules using Drush at Colsubastas.com (Cali).</p>
+                <p>• I Work as a Part-Time Software Developer in the creation, maintenance, and customization of Drupal modules using Drush at Colsubastas.com (Cali).</p>
                 <p>• Participated in the deployment of applications and API platforms, providing support in Apache, Kubernetes, and OpenShift environments, ensuring service availability and stability.</p>
               </div>
             </li>
@@ -117,6 +153,14 @@ function App() {
                 <strong>Developer Freelance</strong>
                 <p>Independent projects</p>
                 <p>Web development for multiple clients across different industries using technologies such as Spring Boot (Java) with Angular and React, Golang with Vue.js, PostgreSQL, and Laravel (PHP), developing robust applications with REST API integrations.</p>
+              </div>
+            </li>
+            <li>
+              <span className="exp-dot" />
+              <div>
+                <strong>Technical Support</strong>
+                <p>Experience applied to administrative and office environments</p>
+
               </div>
             </li>
           </ul>
