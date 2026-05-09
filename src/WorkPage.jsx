@@ -1,6 +1,8 @@
 import { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import goVueVideo from './assets/GoVue.mp4';
+import tgAcueductoVideo from './assets/tgacueducto.mp4';
+import gymPHPVideo from './assets/gymPHP.mp4';
 import './WorkPage.css';
 
 const GithubIcon = () => (
@@ -9,7 +11,41 @@ const GithubIcon = () => (
   </svg>
 );
 
-
+/* ── Desktop Mockup Component ── */
+const DesktopMockup = ({ src }) => (
+  <div className="wp-desktop-stage">
+    <div className="wp-desktop">
+      {/* Menu bar */}
+      <div className="wp-desktop-menubar">
+        <div className="wp-desktop-dots">
+          <span className="wp-dot wp-dot--red" />
+          <span className="wp-dot wp-dot--yellow" />
+          <span className="wp-dot wp-dot--green" />
+        </div>
+        <div className="wp-desktop-url-bar">
+          <span className="wp-desktop-url-icon">🔒</span>
+          <span className="wp-desktop-url-text">localhost:8080</span>
+        </div>
+        <div className="wp-desktop-actions" />
+      </div>
+      {/* Screen */}
+      <div className="wp-desktop-screen">
+        <video
+          src={src}
+          controls
+          className="wp-video"
+          preload="metadata"
+          playsInline
+        />
+      </div>
+      {/* Stand */}
+      <div className="wp-desktop-stand">
+        <div className="wp-desktop-neck" />
+        <div className="wp-desktop-base" />
+      </div>
+    </div>
+  </div>
+);
 
 const STACKS = [
   { id: 'go',     label: 'Golang · Vue.js · PostgreSQL',       accent: '#00ACD7' },
@@ -25,6 +61,7 @@ const PROJECTS = {
       about: 'A full-stack gym management system designed to help gyms efficiently manage client information, handle subscriptions, attendance tracking, and maintain clear payment control. It also includes a clear and intuitive subscription visualization system, allowing both gym administrators and clients to easily identify the status of each membership plan (active, expired, etc.), improving the overall user experience and decision-making process — all through a clean and reactive interface backed by a high-performance REST API, PostgreSQL, and JWT-based authentication for security.',
       tags:  ['Go', 'Vue.js 3', 'PostgreSQL', 'Payment gateway', 'Docker'],
       video: goVueVideo,
+      mockup: 'phone',
     },
     others: [
       {
@@ -40,6 +77,8 @@ const PROJECTS = {
         icon:  '💧',
         about: 'A digital billing management platform developed for small community water utility companies, designed to optimize administrative processes and improve interaction with users. The system allows utility companies to generate invoices, download billing records, and automatically send invoices via email. Customers can view and download their invoices, as well as make online payments through payment gateway integration. The project was focused on applying software architecture best practices and strengthening Full-Stack development skills, especially in backend and frontend communication through REST API integrations.',
         tags:  ['Go', 'Vue.js', 'PostgreSQL', 'Payment gateway'],
+        video: tgAcueductoVideo,
+        mockup: 'desktop',
       },
     ],
   },
@@ -64,6 +103,8 @@ const PROJECTS = {
         icon:  '🐘',
         about: 'A platform designed to help gyms efficiently manage customer information, subscriptions, and payment records. The system also includes email notifications for payment reminders and confirmations, as well as online payment gateway integration to facilitate secure digital transactions. Additionally, it provides a clear and intuitive subscription visualization that allows both administrators and clients to easily identify the status of each membership plan, improving overall user experience and management efficiency. Security and authentication are handled using JWT-based authorization.',
         tags:  ['PHP', 'Laravel', 'PostgreSQL'],
+        video: gymPHPVideo,
+        mockup: 'desktop',
       },
     ],
   },
@@ -107,9 +148,7 @@ export default function WorkPage() {
   const data   = PROJECTS[activeStack];
   const accent = STACKS.find(s => s.id === activeStack)?.accent ?? '#2563eb';
 
-  
-
-   return (
+  return (
     <>
       {/* ─── GOOGLE TRANSLATE ─── */}
       <div className="translate-container">
@@ -153,7 +192,7 @@ export default function WorkPage() {
         {/* Panel */}
         <div className="wp-panel" key={activeStack} style={{ '--panel-accent': accent }}>
 
-          {/* ── Featured project (with phone mockup if has video) ── */}
+          {/* ── Featured project (phone mockup) ── */}
           {data.featured && (
             <section className="wp-section">
               <h2 className="wp-section-title">Featured Project</h2>
@@ -207,24 +246,55 @@ export default function WorkPage() {
               </h2>
               <div className="wp-others-grid">
                 {data.others.map((proj) => (
-                  <div className="wp-other-card" key={proj.repo}>
-                    <div className="wp-other-icon">{proj.icon}</div>
-                    <h3 className="wp-other-name">{proj.name}</h3>
-                    <p className="wp-other-about">{proj.about}</p>
-                    <div className="wp-tags">
-                      {proj.tags.map((t) => (
-                        <span className="wp-tag" key={t}>{t}</span>
-                      ))}
-                    </div>
-                    <a
-                      href={proj.repo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="wp-repo-btn wp-repo-btn--sm"
-                    >
-                      <GithubIcon />
-                      View Repository
-                    </a>
+                  <div
+                    className={`wp-other-card${proj.mockup === 'desktop' ? ' wp-other-card--wide' : ''}`}
+                    key={proj.repo}
+                  >
+                    {/* Desktop mockup inline if has desktop video */}
+                    {proj.mockup === 'desktop' && proj.video ? (
+                      <div className="wp-other-card-desktop-layout">
+                        <DesktopMockup src={proj.video} />
+                        <div className="wp-other-card-info">
+                          <div className="wp-other-icon">{proj.icon}</div>
+                          <h3 className="wp-other-name">{proj.name}</h3>
+                          <p className="wp-other-about">{proj.about}</p>
+                          <div className="wp-tags">
+                            {proj.tags.map((t) => (
+                              <span className="wp-tag" key={t}>{t}</span>
+                            ))}
+                          </div>
+                          <a
+                            href={proj.repo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="wp-repo-btn wp-repo-btn--sm"
+                          >
+                            <GithubIcon />
+                            View Repository
+                          </a>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="wp-other-icon">{proj.icon}</div>
+                        <h3 className="wp-other-name">{proj.name}</h3>
+                        <p className="wp-other-about">{proj.about}</p>
+                        <div className="wp-tags">
+                          {proj.tags.map((t) => (
+                            <span className="wp-tag" key={t}>{t}</span>
+                          ))}
+                        </div>
+                        <a
+                          href={proj.repo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="wp-repo-btn wp-repo-btn--sm"
+                        >
+                          <GithubIcon />
+                          View Repository
+                        </a>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
