@@ -7,6 +7,9 @@ import tgAcueductoVideo from './assets/tgacueducto.mp4';
 import gymPHPVideo from './assets/gymPHP.mp4';
 import barbershopVideo from './assets/barbershop.mp4';
 import springBootVideo from './assets/springBoot.webm';
+import loginSmtpVideo   from './assets/loginSMTP.webm';
+import reserveVideo     from './assets/reserve.webm';
+import comprobanteVideo from './assets/comprobante.webm';
 
 // Tech stack icons
 import goIcon        from './assets/tech/Go.svg';
@@ -51,7 +54,6 @@ const CloseIcon = () => (
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
 );
-
 const CodeIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
 );
@@ -128,6 +130,7 @@ const STACKS = [
   { id: 'go',     label: 'Golang · Vue.js',       accent: '#00ACD7' },
   { id: 'spring', label: 'Spring Boot · Angular',  accent: '#6DB33F' },
   { id: 'php',    label: 'PHP · Laravel',          accent: '#8892BF' },
+  { id: 'dotnet', label: 'C# · .NET',              accent: '#512BD4' },
 ];
 
 const PROJECTS = {
@@ -188,6 +191,36 @@ const PROJECTS = {
       },
     ],
   },
+  dotnet: {
+    featured: null,
+    others: [
+      {
+        repo:   'https://github.com/jhoancamilorayomejia/FoundReserves',
+        name:   'FoundReserves',
+        icon:   '🏨',
+        about:  'Web platform that allows users to check availability across different tourist sites based on their desired dates, make reservations for accommodations, and pay online. Built with ASP.NET Core MVC and Entity Framework Core, it includes role-based authentication, season-based rate calculation, PDF voucher upload, and SMTP-powered password recovery.',
+        tags:   ['C#', '.NET', 'ASP.NET Core MVC', 'Entity Framework', 'SQL Server', 'SMTP'],
+        mockup: 'multi',
+        sections: [
+          {
+            label: 'Authentication & Password Recovery',
+            desc:  'Login system with role-based access control (admin / customer) and secure password reset via SMTP email.',
+            video: loginSmtpVideo,
+          },
+          {
+            label: 'Reservation Flow',
+            desc:  'Availability search by dates and site, room selection, season-based rate calculation, and online booking confirmation.',
+            video: reserveVideo,
+          },
+          {
+            label: 'Payment Voucher',
+            desc:  'Clients upload their payment proof after booking; administrators review, confirm, or reject the voucher from the dashboard.',
+            video: comprobanteVideo,
+          },
+        ],
+      },
+    ],
+  },
 };
 
 /* ─── Portfolio tabs ─── */
@@ -199,8 +232,6 @@ const PORTFOLIO_TABS = [
 
 /* ─── Nav links ─── */
 const NAV_LINKS = ['Home', 'About', 'Portfolio'];
-
-
 
 /* ─── Reveal on scroll hook ─── */
 function useReveal() {
@@ -229,51 +260,42 @@ export default function App() {
   const [activeStack, setActiveStack] = useState('go');
   const [activeNav, setActiveNav]     = useState('Home');
   const [menuOpen, setMenuOpen]       = useState(false);
-  
   const [activePortfolioTab, setActivePortfolioTab] = useState('projects');
- 
-  const observerRef  = useRef(null);
+  const observerRef = useRef(null);
 
   useReveal();
 
-  /* Splash screen: show 2.6s then fade out */
+  /* Splash screen */
   useEffect(() => {
     const hideTimer = setTimeout(() => setSplashHide(true), 2600);
     const doneTimer = setTimeout(() => setSplashDone(true), 3200);
     return () => { clearTimeout(hideTimer); clearTimeout(doneTimer); };
   }, []);
 
-  // ─── GOOGLE TRANSLATE ───
+  /* Google Translate */
   useEffect(() => {
-  const addGoogleTranslateScript = () => {
-    if (document.getElementById('google-translate-script')) return;
-
-    const script = document.createElement('script');
-    script.id = 'google-translate-script';
-    script.src =
-      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-    script.async = true;
-
-    document.body.appendChild(script);
-
-    window.googleTranslateElementInit = () => {
-      if (window.google && window.google.translate) {
-        new window.google.translate.TranslateElement(
-          {
-            pageLanguage: 'en',
-            includedLanguages: 'es,en,pt,fr,de,it',
-            layout:
-              window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-          },
-          'google_translate_element'
-        );
-      }
+    const addGoogleTranslateScript = () => {
+      if (document.getElementById('google-translate-script')) return;
+      const script = document.createElement('script');
+      script.id = 'google-translate-script';
+      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      document.body.appendChild(script);
+      window.googleTranslateElementInit = () => {
+        if (window.google && window.google.translate) {
+          new window.google.translate.TranslateElement(
+            {
+              pageLanguage: 'en',
+              includedLanguages: 'es,en,pt,fr,de,it',
+              layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+            },
+            'google_translate_element'
+          );
+        }
+      };
     };
-  };
-
-  addGoogleTranslateScript();
-}, []);
-
+    addGoogleTranslateScript();
+  }, []);
 
   /* Scroll spy */
   useEffect(() => {
@@ -333,102 +355,83 @@ export default function App() {
         </div>
       )}
 
-      {/* ════════════════════════════════
-          NAV
-      ════════════════════════════════ */}
+      {/* ── Nav ── */}
       <nav className="navbar">
-  <div className="nav-inner">
-    <span className="nav-logo">Jcrm<span className="nav-logo-dot">.</span></span>
+        <div className="nav-inner">
+          <span className="nav-logo">Jcrm<span className="nav-logo-dot">.</span></span>
+          <div className={`nav-links${menuOpen ? ' nav-links--open' : ''}`}>
+            {NAV_LINKS.map(n => (
+              <button
+                key={n}
+                className={`nav-link${activeNav === n ? ' nav-link--active' : ''}`}
+                onClick={() => scrollTo(n)}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+          <div className="translate-container">
+            <div id="google_translate_element"></div>
+          </div>
+          <button className="nav-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
+            <span /><span /><span />
+          </button>
+        </div>
+      </nav>
 
-    <div className={`nav-links${menuOpen ? ' nav-links--open' : ''}`}>
-      {NAV_LINKS.map(n => (
-        <button
-          key={n}
-          className={`nav-link${activeNav === n ? ' nav-link--active' : ''}`}
-          onClick={() => scrollTo(n)}
-        >
-          {n}
-        </button>
-      ))}
-    </div>
-
-    {/* Traductor aquí, entre links y hamburger */}
-    <div className="translate-container">
-      <div id="google_translate_element"></div>
-    </div>
-
-    <button className="nav-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
-      <span /><span /><span />
-    </button>
-  </div>
-</nav>
-
-      {/* ════════════════════════════════
-          HERO
-      ════════════════════════════════ */}
+      {/* ── Hero ── */}
       <section id="home" className="hero-section">
-       
-  <div className="hero-glow hero-glow--1" />
-  <div className="hero-glow hero-glow--2" />
+        <div className="hero-glow hero-glow--1" />
+        <div className="hero-glow hero-glow--2" />
+        <div className="hero-inner">
+          <div className="hero-text">
+            <p className="hero-greeting reveal reveal--up" style={{ '--delay': '0.1s' }}>Hello, I'm</p>
+            <h1 className="hero-name reveal reveal--up" style={{ '--delay': '0.2s' }}>
+              Jhoan Camilo<br />Rayo Mejia
+            </h1>
+            <p className="hero-role reveal reveal--up" style={{ '--delay': '0.3s' }}>Web Developer</p>
+            <p className="hero-tagline reveal reveal--up" style={{ '--delay': '0.4s' }}>
+              I build efficient, scalable, and secure digital experiences using modern architectures, REST API integrations, and JWT-based authentication.
+            </p>
+            <div className="hero-socials reveal reveal--up" style={{ '--delay': '0.5s' }}>
+              <a href="https://www.linkedin.com/in/jhoan-camilo-rayo-mejia-2114ab286/" target="_blank" rel="noopener noreferrer" className="social-pill" aria-label="LinkedIn">
+                <LinkedInIcon /><span>LinkedIn</span>
+              </a>
+              <a href="https://github.com/jhoancamilorayomejia" target="_blank" rel="noopener noreferrer" className="social-pill" aria-label="GitHub">
+                <GitHubIcon /><span>GitHub</span>
+              </a>
+              <a href="https://www.instagram.com/jhoancamilorayo/" target="_blank" rel="noopener noreferrer" className="social-pill" aria-label="Instagram">
+                <InstagramIcon /><span>Instagram</span>
+              </a>
+              <a href="mailto:camilorayomejia@gmail.com" className="social-pill" aria-label="Email">
+                <EmailIcon /><span>Email</span>
+              </a>
+            </div>
+            <div className="hero-ctas reveal reveal--up" style={{ '--delay': '0.6s' }}>
+              <button className="cta-btn cta-btn--primary" onClick={() => scrollTo('Portfolio')}>
+                View My Work <ArrowIcon />
+              </button>
+              <button className="cta-btn cta-btn--secondary" onClick={() => setShowCV(true)}>
+                <DocIcon /> Check My CV
+              </button>
+            </div>
+          </div>
+          <div className="hero-photo-wrap reveal reveal--up">
+            <img src={developerMe} alt="Jhoan Camilo Rayo Mejia" className="hero-photo" />
+          </div>
+        </div>
+        <div className="scroll-indicator">
+          <div className="scroll-dot" />
+        </div>
+      </section>
 
-  <div className="hero-inner">
-    {/* Text left */}
-    <div className="hero-text">
-      <p className="hero-greeting reveal reveal--up" style={{ '--delay': '0.1s' }}>Hello, I'm</p>
-      <h1 className="hero-name reveal reveal--up" style={{ '--delay': '0.2s' }}>
-        Jhoan Camilo<br />Rayo Mejia
-      </h1>
-      <p className="hero-role reveal reveal--up" style={{ '--delay': '0.3s' }}>Web Developer</p>
-      <p className="hero-tagline reveal reveal--up" style={{ '--delay': '0.4s' }}>
-        I build efficient, scalable, and secure digital experiences using modern architectures, REST API integrations, and JWT-based authentication.
-      </p>
-
-      <div className="hero-socials reveal reveal--up" style={{ '--delay': '0.5s' }}>
-        <a href="https://www.linkedin.com/in/jhoan-camilo-rayo-mejia-2114ab286/" target="_blank" rel="noopener noreferrer" className="social-pill" aria-label="LinkedIn">
-          <LinkedInIcon /><span>LinkedIn</span>
-        </a>
-        <a href="https://github.com/jhoancamilorayomejia" target="_blank" rel="noopener noreferrer" className="social-pill" aria-label="GitHub">
-          <GitHubIcon /><span>GitHub</span>
-        </a>
-        <a href="https://www.instagram.com/jhoancamilorayo/" target="_blank" rel="noopener noreferrer" className="social-pill" aria-label="Instagram">
-          <InstagramIcon /><span>Instagram</span>
-        </a>
-        <a href="mailto:camilorayomejia@gmail.com" className="social-pill" aria-label="Email">
-          <EmailIcon /><span>Email</span>
-        </a>
-      </div>
-
-      <div className="hero-ctas reveal reveal--up" style={{ '--delay': '0.6s' }}>
-        <button className="cta-btn cta-btn--primary" onClick={() => scrollTo('Portfolio')}>
-          View My Work <ArrowIcon />
-        </button>
-        <button className="cta-btn cta-btn--secondary" onClick={() => setShowCV(true)}>
-          <DocIcon /> Check My CV
-        </button>
-      </div>
-    </div>
-
-    {/* Photo right */}
-    <div className="hero-photo-wrap reveal reveal--up">
-      <img src={developerMe} alt="Jhoan Camilo Rayo Mejia" className="hero-photo" />
-    </div>
-  </div>
-
-  <div className="scroll-indicator">
-    <div className="scroll-dot" />
-  </div>
-</section>
-
-      {/* ════════════════════════════════
-          ABOUT
-      ════════════════════════════════ */}
+      {/* ── About ── */}
       <section id="about" className="section about-section">
         <div className="section-inner">
           <div className="section-header reveal reveal--up">
             <span className="section-badge">About Me</span>
             <h2 className="section-title">Who am I?</h2>
           </div>
-
           <div className="about-grid">
             <div className="about-photo-wrap reveal reveal--left">
               <div className="about-photo-card">
@@ -446,7 +449,6 @@ export default function App() {
                 </div>
               </div>
             </div>
-
             <div className="about-text reveal reveal--right">
               <p>
                 I am a Systems Engineer with experience in the development and support of technology solutions focused on improving the efficiency, scalability, and stability of digital platforms. Throughout my professional career, I have participated in projects involving software development, service integration, application management, and solution deployment in modern environments, allowing me to build a comprehensive understanding of the software development lifecycle and its impact on business operations.
@@ -459,9 +461,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ════════════════════════════════
-          PORTFOLIO (Projects / Experience / Tech Stack)
-      ════════════════════════════════ */}
+      {/* ── Portfolio ── */}
       <section id="portfolio" className="section portfolio-section">
         <div className="section-inner">
           <div className="section-header reveal reveal--up">
@@ -530,7 +530,7 @@ export default function App() {
                       {data.others.map(proj => (
                         <div
                           key={proj.repo}
-                          className={`other-card${proj.mockup === 'desktop' ? ' other-card--wide' : ''}`}
+                          className={`other-card${proj.mockup === 'desktop' ? ' other-card--wide' : ''}${proj.mockup === 'multi' ? ' other-card--multi' : ''}`}
                         >
                           {proj.mockup === 'desktop' && proj.video ? (
                             <div className="other-card-desktop-layout">
@@ -552,6 +552,36 @@ export default function App() {
                                 <p className="other-about">{proj.about}</p>
                                 <div className="proj-tags">{proj.tags.map(t => <span key={t} className="proj-tag">{t}</span>)}</div>
                                 <a href={proj.repo} target="_blank" rel="noopener noreferrer" className="repo-btn repo-btn--sm"><GitHubIcon /> View Repository</a>
+                              </div>
+                            </div>
+                          ) : proj.mockup === 'multi' ? (
+                            <div className="other-card-multi-layout">
+                              <div className="multi-header">
+                                <div className="other-icon">{proj.icon}</div>
+                                <div>
+                                  <h3 className="other-name">{proj.name}</h3>
+                                  <p className="other-about">{proj.about}</p>
+                                  <div className="proj-tags">
+                                    {proj.tags.map(t => <span key={t} className="proj-tag">{t}</span>)}
+                                  </div>
+                                  <a href={proj.repo} target="_blank" rel="noopener noreferrer" className="repo-btn repo-btn--sm">
+                                    <GitHubIcon /> View Repository
+                                  </a>
+                                </div>
+                              </div>
+                              <div className="multi-sections">
+                                {proj.sections.map((sec, i) => (
+                                  <div key={sec.label} className="multi-section-item">
+                                    <div className="multi-section-badge">
+                                      <span className="multi-section-number">{i + 1}</span>
+                                      <div>
+                                        <h4 className="multi-section-label">{sec.label}</h4>
+                                        <p className="multi-section-desc">{sec.desc}</p>
+                                      </div>
+                                    </div>
+                                    <DesktopMockup src={sec.video} />
+                                  </div>
+                                ))}
                               </div>
                             </div>
                           ) : (
@@ -577,7 +607,6 @@ export default function App() {
             <div className="tab-panel" key="experience">
               <div className="timeline">
                 <div className="timeline-track" />
-
                 <div className="timeline-item reveal reveal--left">
                   <div className="timeline-node" />
                   <div className="timeline-card">
@@ -592,7 +621,6 @@ export default function App() {
                     </ul>
                   </div>
                 </div>
-
                 <div className="timeline-item reveal reveal--left" style={{ '--delay': '0.15s' }}>
                   <div className="timeline-node" />
                   <div className="timeline-card">
@@ -607,7 +635,6 @@ export default function App() {
                     </ul>
                   </div>
                 </div>
-
                 <div className="timeline-item reveal reveal--left" style={{ '--delay': '0.3s' }}>
                   <div className="timeline-node" />
                   <div className="timeline-card">
@@ -647,9 +674,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ════════════════════════════════
-          FOOTER
-      ════════════════════════════════ */}
+      {/* ── Footer ── */}
       <footer className="footer">
         <div className="footer-inner">
           <p className="footer-name">Jhoan Camilo Rayo Mejia</p>
@@ -662,6 +687,7 @@ export default function App() {
           <p className="footer-copy">© {new Date().getFullYear()} · Built with React</p>
         </div>
       </footer>
+
     </div>
   );
 }
