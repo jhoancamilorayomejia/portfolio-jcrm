@@ -10,6 +10,7 @@ import springBootVideo from './assets/springBoot.webm';
 import loginSmtpVideo   from './assets/loginSMTP.webm';
 import reserveVideo     from './assets/reserve.webm';
 import comprobanteVideo from './assets/comprobante.webm';
+import testDasboard from './assets/testDashboard.png';
 
 // Tech stack icons
 import goIcon        from './assets/tech/Go.svg';
@@ -128,7 +129,7 @@ const TECH_STACK = [
 /* ─── Projects Data ─── */
 const STACKS = [
   { id: 'go',     label: 'Golang · Vue.js',       accent: '#00ACD7' },
-  { id: 'spring', label: 'Spring Boot · Angular',  accent: '#6DB33F' },
+  { id: 'spring', label: 'Spring Boot · Java',  accent: '#6DB33F' },
   { id: 'php',    label: 'PHP · Laravel',          accent: '#8892BF' },
   { id: 'dotnet', label: 'C# · .NET',              accent: '#512BD4' },
 ];
@@ -175,8 +176,22 @@ const PROJECTS = {
         video: springBootVideo,
         mockup: 'desktop',
       },
+     
+    {
+      repo: 'https://github.com/jhoancamilorayomejia/testSymplific',
+      name: 'Employee Dashboard',
+      icon: '👥',
+      about: 'Full-stack employee management platform built with Spring Boot and Vue.js. Features secure JWT authentication, employee and benefits CRUD operations, integration with the OpenStreetMap Nominatim API to retrieve location coordinates from XML responses, SMTP-based password recovery, unit testing, clean architecture following SOLID principles, and Docker Compose for application deployment.',
+      tags: ['Java', 'Spring Boot', 'Vue.js', 'Docker'],
+      image: testDasboard, // falta colocar un capture
+      mockup: 'desktop',
+    },
+
     ],
   },
+  
+  
+
   php: {
     featured: null,
     others: [
@@ -532,9 +547,43 @@ export default function App() {
                           key={proj.repo}
                           className={`other-card${proj.mockup === 'desktop' ? ' other-card--wide' : ''}${proj.mockup === 'multi' ? ' other-card--multi' : ''}`}
                         >
-                          {proj.mockup === 'desktop' && proj.video ? (
+                          {proj.mockup === 'desktop' && (proj.video || proj.image) ? (
                             <div className="other-card-desktop-layout">
-                              <DesktopMockup src={proj.video} />
+                              {proj.video ? (
+  <DesktopMockup src={proj.video} />
+) : (
+  <div className="mockup-desktop-stage">
+    <div className="mockup-desktop">
+      <div className="mockup-menubar">
+        <div className="mockup-dots">
+          <span className="dot dot--red" />
+          <span className="dot dot--yellow" />
+          <span className="dot dot--green" />
+        </div>
+
+        <div className="mockup-url-bar">
+          <span>🔒</span>
+          <span className="mockup-url-text">localhost:8080</span>
+        </div>
+
+        <div style={{ width: 40 }} />
+      </div>
+
+      <div className="mockup-screen">
+        <img
+          src={proj.image}
+          alt={proj.name}
+          className="mockup-image"
+        />
+      </div>
+
+      <div className="mockup-stand">
+        <div className="mockup-neck" />
+        <div className="mockup-base" />
+      </div>
+    </div>
+  </div>
+)}
                               <div className="other-card-info">
                                 <div className="other-icon">{proj.icon}</div>
                                 <h3 className="other-name">{proj.name}</h3>
